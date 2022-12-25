@@ -3,66 +3,90 @@ from random import randint
 from graphic_arts.start_game_banner import run_screensaver
 
 
-def attack(char_name: str, char_class: str) -> str:
-    """Attack."""
-    if char_class == 'warrior':
-        return (f'{char_name} '
+class Character:
+    def __init__(self, char_name) -> None:
+        self.char_name = char_name
+
+    def start_training(self) -> str:
+        """Start training."""
+        print('Потренируйся управлять своими навыками.')
+        print(
+            'Введи одну из команд: attack — чтобы атаковать противника, '
+            'defence — чтобы блокировать атаку противника или special '
+            '— чтобы использовать свою суперсилу.'
+            )
+        print('Если не хочешь тренироваться, введи команду skip.')
+        cmd: str = ''
+        while cmd != 'skip':
+            cmd = input('Введи команду: ')
+            if cmd == 'attack':
+                print(character.attack())
+            if cmd == 'defence':
+                print(character.defence())
+            if cmd == 'special':
+                print(character.special())
+        return ('Тренировка окончена.')
+
+
+class Warrior(Character):
+    def attack(self) -> str:
+        """Attack."""
+        return (f'{self.char_name} '
                 f'нанёс урон противнику равный {5 + randint(3, 5)}')
-    if char_class == 'mage':
+
+    def defence(self) -> str:
+        """Defence."""
+        return (f'{self.char_name} блокировал {10 + randint(5, 10)} урона')
+
+    def special(self) -> str:
+        """Ulta."""
+        return (f'{self.char_name} '
+                f'применил специальное умение «Выносливость {105}»')
+
+    def start_training(self) -> str:
+        """Start training."""
+        print(f'{self.char_name}, ты Воитель — отличный боец ближнего боя.')
+        print(super().start_training())
+
+
+class Mage(Character):
+    def attack(self) -> str:
+        """Attack."""
         return (f'{char_name} '
                 f'нанёс урон противнику равный {5 + randint(5, 10)}')
-    if char_class == 'healer':
+
+    def defence(self) -> str:
+        """Defence."""
+        return (f'{char_name} блокировал {10 + randint(-2, 2)} урона')
+
+    def special(self) -> str:
+        """Ulta."""
+        return (f'{char_name} применил специальное умение «Атака {45}»')
+
+    def start_training(self) -> str:
+        """Start training."""
+        print(f'{char_name}, ты Маг — превосходный укротитель стихий.')
+        print(super().start_training())
+
+
+class Healer(Character):
+    def attack(self) -> str:
+        """Attack."""
         return (f'{char_name} '
                 f'нанёс урон противнику равный {5+ randint(-3, -1)}')
-    return (f'{char_name} не нанес урон противнику')
 
-
-def defence(char_name: str, char_class: str) -> str:
-    """Defence."""
-    if char_class == 'warrior':
-        return (f'{char_name} блокировал {10 + randint(5, 10)} урона')
-    if char_class == 'mage':
-        return (f'{char_name} блокировал {10 + randint(-2, 2)} урона')
-    if char_class == 'healer':
+    def defence(self) -> str:
+        """Defence."""
         return (f'{char_name} блокировал {10 + randint(2, 5)} урона')
-    return (f'{char_name} не блокировал входящий урон')
 
-
-def special(char_name: str, char_class: str) -> str:
-    """Ulta."""
-    if char_class == 'warrior':
-        return (f'{char_name} '
-                f'применил специальное умение «Выносливость {105}»')
-    if char_class == 'mage':
-        return (f'{char_name} применил специальное умение «Атака {45}»')
-    if char_class == 'healer':
+    def special(self) -> str:
+        """Ulta."""
         return (f'{char_name} применил специальное умение «Защита {40}»')
-    return (f'{char_name} не применил специальное умение')
 
-
-def start_training(char_name: str, char_class: str) -> str:
-    """Start training."""
-    if char_class == 'warrior':
-        print(f'{char_name}, ты Воитель — отличный боец ближнего боя.')
-    if char_class == 'mage':
-        print(f'{char_name}, ты Маг — превосходный укротитель стихий.')
-    if char_class == 'healer':
+    def start_training(self) -> str:
+        """Start training."""
         print(f'{char_name}, ты Лекарь — чародей, способный исцелять раны.')
-    print('Потренируйся управлять своими навыками.')
-    print('Введи одну из команд: attack — чтобы атаковать противника, defence '
-          '— чтобы блокировать атаку противника или special '
-          '— чтобы использовать свою суперсилу.')
-    print('Если не хочешь тренироваться, введи команду skip.')
-    cmd: str = ''
-    while cmd != 'skip':
-        cmd = input('Введи команду: ')
-        if cmd == 'attack':
-            print(attack(char_name, char_class))
-        if cmd == 'defence':
-            print(defence(char_name, char_class))
-        if cmd == 'special':
-            print(special(char_name, char_class))
-    return 'Тренировка окончена.'
+        print(super().start_training())
 
 
 def choice_char_class() -> str:
@@ -101,4 +125,10 @@ if __name__ == '__main__':
     print('Ты можешь выбрать один из трёх путей силы:')
     print('Воитель, Маг, Лекарь')
     char_class: str = choice_char_class()
-    print(start_training(char_name, char_class))
+    if char_class == 'warrior':
+        character = Warrior(char_name)
+    elif char_class == 'mage':
+        character = Mage(char_name)
+    else:
+        character = Healer(char_name)
+    character.start_training()
